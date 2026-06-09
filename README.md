@@ -11,7 +11,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 | Attribute | Detail |
 |---|---|
 | **Market** | Saudi Arabia 🇸🇦 |
-| **Data Volume** | ~12,000+ records across 4 source systems |
+| **Data Volume** | Thounsands of records across 4 source systems |
 | **Date Range** | January 2024 – December 2026 |
 | **Architecture** | Medallion (Bronze → Silver → Gold) |
 | **Processing** | Apache Spark / PySpark on Databricks |
@@ -24,7 +24,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -80,19 +80,21 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 Saudi_retail_pipeline/
 │
 ├── scripts/
-│   ├── 00_config.ipynb              # Global config · catalog · constants · API keys
+│   ├── 00_config.ipynb              # Global config · catalog · constants 
 │   │
 │   ├── bronze/
-│   │   ├── 02_bronze_products.ipynb       # HasData Amazon.sa scraper
-│   │   ├── 03_bronze_orders_enrich.ipynb  # Mockaroo orders + product injection
-│   │   ├── 04_bronze_holidays.ipynb       # Calendarific Saudi holidays
-│   │   └── 05_bronze_weather.ipynb        # Open-Meteo historical weather
+│   │   ├── bronze_products.ipynb                 # HasData Amazon.sa scraper (Manual Ingestion version)
+│   │   ├── bronze_products_automated.ipynb       # HasData Amazon.sa scraper (Direct API Ingestion version)
+│   │   ├── bronze_orders.ipynb                   # Mockaroo orders + product injection (Manual Ingestion version)
+│   │   ├── bronze_holidays.ipynb                 # Calendarific Saudi holidays (Manual Ingestion version)
+│   │   ├── bronze_holidays_automated.ipynb       # Calendarific Saudi holidays (Direct API Ingestion version)
+│   │   └── bronze_weather.ipynb                  # Open-Meteo historical weather (Direct API Ingestion version)
 │   │
 │   ├── silver/
 │   │   ├── 07_silver_products.ipynb       # Type casting · dedup · category normalization
@@ -102,9 +104,9 @@ Saudi_retail_pipeline/
 │   │
 │   └── gold/
 │       ├── 11_gold_dim_holiday.ipynb      # Saudi holiday dimension
-│       ├── 12_gold_dim_product.ipynb      # Product dimension + discount logic
+│       ├── 12_gold_dim_product.ipynb      # Product dimension + price change and business logic
 │       ├── 13_gold_dim_city.ipynb         # City dimension + coordinates
-│       ├── 14_gold_dim_customer.ipynb     # Customer dimension + surrogate keys
+│       ├── 14_gold_dim_customer.ipynb     # Customer dimension 
 │       ├── 15_gold_dim_payment_method.ipynb
 │       ├── 16_gold_dim_device_type.ipynb
 │       ├── 17_gold_fact_weather.ipynb     # Weather fact table
@@ -117,7 +119,7 @@ Saudi_retail_pipeline/
 
 ---
 
-## 🌟 Star Schema
+## Star Schema
 
 ```
                         dim_product
@@ -147,12 +149,12 @@ dim_payment_method ──► fact_orders ◄── dim_device_type
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| **Compute** | Databricks Community Edition |
-| **Language** | Python 3.12 · PySpark · SQL |
+| **Compute** | Databricks |
+| **Language** | Python · PySpark · SQL |
 | **Storage** | Delta Lake (ACID transactions) |
 | **Catalog** | Unity Catalog |
 | **APIs** | HasData · Open-Meteo · Calendarific · Mockaroo |
@@ -163,14 +165,13 @@ dim_payment_method ──► fact_orders ◄── dim_device_type
 
 ---
 
-## 🔑 Key Engineering Decisions
+## Key Engineering Decisions
 
 ### 1. Immutable Bronze Layer
 Bronze tables are **append-only and never modified**. All enrichment and cleaning happens in dedicated downstream tables. This preserves raw data integrity and enables full pipeline replayability.
 
 ### 2. Deduplication Strategy
-Weather data is deduplicated at two levels:
-- **Python level** — within each API batch using a `seen` set before DataFrame creation
+Weather data is deduplicated:
 - **Spark level** — `left_anti` join against existing Bronze table before append, ensuring no city+date duplicates regardless of how many times the pipeline runs
 
 ### 3. Mixed Date Format Handling
@@ -181,26 +182,25 @@ Instead of hardcoding category mappings, Silver products derives categories dyna
 
 ### 5. Surrogate Key Design
 Surrogate keys use meaningful prefixes rather than plain integers:
-- `NACA100001` — customers (NACA = Saudi nationality code reference)
 - `CITY_RIYADH` — cities (human-readable, stable)
 - `PAMA100001` — payment methods
 - `DATA100001` — device types
 
 ### 6. Gold Layer Business Logic
-All business logic — discount calculations, price change percentages, foreign key resolution — lives exclusively in Gold. Silver is a clean, business-agnostic representation of source data.
+All business logic —  price change and its percentages, total amount, foreign key resolution — lives exclusively in Gold. Silver is a clean, business-agnostic representation of source data.
 
 <br>
 
 ---
 
-## 📊 Data Sources
+## Data Sources
 
 | Source | API | Records | Refresh |
 |---|---|---|---|
-| Amazon.sa Products | HasData | ~542 products · 10 categories | Manual (CE limitation) |
-| Orders | Mockaroo | 6,000 synthetic orders | On-demand |
-| Weather | Open-Meteo Archive | 5,310 rows · 6 cities · 2 years | Daily append |
-| Holidays | Calendarific | 52 holidays · 3 years | Annual |
+| Amazon.sa Products | HasData | ~542 products · 10 categories | Manual (CE limitation) and Automated (Paid Databricks) |
+| Orders | Mockaroo | 6,000 synthetic orders | Manual (CE limitation) and Automated (Paid Databricks) |
+| Weather | Open-Meteo Archive | 5,310 rows · 6 cities · 2 years | Daily append (Automated) |
+| Holidays | Calendarific | 52 holidays · 3 years | Annual (Automated) |
 
 > **Note on Databricks CE:** Community Edition restricts outbound internet to certain domains. Open-Meteo is whitelisted and runs directly from the cluster. Other APIs are fetched externally via Postman/VS Code and loaded via DBFS — a pattern that mirrors real enterprise ingestion patterns where API calls are separated from transformation workloads.
 
@@ -208,7 +208,7 @@ All business logic — discount calculations, price change percentages, foreign 
 
 ---
 
-## 📐 Gold Layer Tables
+## Gold Layer Tables
 
 ### Fact Tables
 
@@ -232,7 +232,7 @@ All business logic — discount calculations, price change percentages, foreign 
 
 ---
 
-## 📈 Dashboard Pages (Power BI)
+## Dashboard Pages (Power BI)
 
 | Page | Business Questions Answered |
 |---|---|
@@ -247,7 +247,7 @@ All business logic — discount calculations, price change percentages, foreign 
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### Prerequisites
 - Databricks workspace (Community Edition or higher)
@@ -282,7 +282,7 @@ CALENDARIFIC_KEY   = "your_key_here"
 
 ---
 
-## 🧠 What This Project Demonstrates
+## What This Project Demonstrates
 
 - **API integration** across 4 heterogeneous sources with different authentication, response formats, and reliability characteristics
 - **Delta Lake** expertise — ACID transactions, schema evolution, time travel awareness, merge patterns
@@ -296,7 +296,7 @@ CALENDARIFIC_KEY   = "your_key_here"
 
 ---
 
-## 👤 Author
+## Author
 
 **Bilal Mohammed**
 CRM Designer → Data Engineer
@@ -309,7 +309,7 @@ Samsung Electronics · Riyadh, Saudi Arabia
 
 ---
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
