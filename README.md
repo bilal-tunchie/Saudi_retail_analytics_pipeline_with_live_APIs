@@ -26,55 +26,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        DATA SOURCES                              │
-│                                                                   │
-│  HasData Amazon.sa API    Mockaroo (Orders)    Open-Meteo         │
-│  ─────────────────────    ────────────────     ──────────         │
-│  Products · Prices        Synthetic Orders     Weather History    │
-│  Ratings · Badges         6,000 records        5,310 records      │
-│                                                                   │
-│                        Calendarific API                           │
-│                        ────────────────                           │
-│                        Saudi Holidays · 3 Years                  │
-└──────────────────────────────┬──────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    🥉 BRONZE LAYER                                │
-│              Raw ingestion — immutable, append-only              │
-│                                                                   │
-│   bronze_product    bronze_orders    weather    bronze_holidays   │
-│   bronze_orders_enriched (product injection)                     │
-└──────────────────────────────┬──────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    🥈 SILVER LAYER                                │
-│         Cleaned · Type-cast · Normalized · Deduplicated          │
-│                                                                   │
-│   silver_product    silver_orders    silver_weather              │
-│   silver_holidays                                                 │
-└──────────────────────────────┬──────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     🥇 GOLD LAYER                                 │
-│              Star Schema · Business Logic · Aggregations         │
-│                                                                   │
-│   fact_orders        fact_weather                                │
-│   dim_product        dim_customer      dim_city                  │
-│   dim_payment_method dim_device_type   dim_holidays              │
-└──────────────────────────────┬──────────────────────────────────┘
-                               │
-                               ▼
-                    ┌─────────────────┐
-                    │   Power BI      │
-                    │  Direct Query   │
-                    │  Star Schema    │
-                    └─────────────────┘
-```
+![Medallion Architecture](https://samsung-crm.com/mena/KSA/250731_VD/medallion_architecture.png)
 
 <br>
 
@@ -121,29 +73,7 @@ Saudi_retail_pipeline/
 
 ## Star Schema
 
-```
-                        dim_product
-                        (asin PK)
-                             │
-          dim_customer        │         dim_city
-          (customer_id PK)   │         (city_id PK)
-                    │         │              │
-                    └────┐    │    ┌─────────┘
-                         ▼    ▼    ▼
-dim_payment_method ──► fact_orders ◄── dim_device_type
-(payment_method_id PK)  (order_id)     (device_type_id PK)
-                             │
-                        order_date
-                             │
-                         dim_date ──► dim_holidays
-                         (Date PK)    (holiday_date FK)
-                             │
-                        fact_weather
-                        (date + city_id)
-                             │
-                          dim_city
-                          (city_id PK)
-```
+![Data Model](https://samsung-crm.com/mena/KSA/250731_VD/Data-Model1.gif)
 
 <br>
 
