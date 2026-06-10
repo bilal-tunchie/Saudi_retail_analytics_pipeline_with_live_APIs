@@ -12,7 +12,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 |---|---|
 | **Market** | Saudi Arabia 🇸🇦 |
 | **Data Volume** | Thounsands of records across 4 source systems |
-| **Date Range** | January 2024 – December 2026 |
+| **Date Range** | January 2024 – upto date |
 | **Architecture** | Medallion (Bronze → Silver → Gold) |
 | **Processing** | Apache Spark / PySpark on Databricks |
 | **Storage** | Delta Lake |
@@ -128,8 +128,8 @@ All business logic —  price change and its percentages, total amount, foreign 
 | Source | API | Records | Refresh |
 |---|---|---|---|
 | Amazon.sa Products | HasData | ~542 products · 10 categories | Manual (CE limitation) and Automated (Paid Databricks) |
-| Orders | Mockaroo | 6,000 synthetic orders | Manual (CE limitation) and Automated (Paid Databricks) |
-| Weather | Open-Meteo Archive | 5,310 rows · 6 cities · 2 years | Daily append (Automated) |
+| Orders | Mockaroo | 6,000+ synthetic orders | Manual (CE limitation) and Automated (Paid Databricks) |
+| Weather | Open-Meteo Archive | 5,310+ rows · 6 cities · 2 years | Daily append (Automated) |
 | Holidays | Calendarific | 52 holidays · 3 years | Annual (Automated) |
 
 > **Note on Databricks CE:** Community Edition restricts outbound internet to certain domains. Open-Meteo is whitelisted and runs directly from the cluster. Other APIs are fetched externally via Postman/VS Code and loaded via DBFS — a pattern that mirrors real enterprise ingestion patterns where API calls are separated from transformation workloads.
