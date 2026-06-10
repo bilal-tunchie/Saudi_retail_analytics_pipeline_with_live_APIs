@@ -229,11 +229,11 @@ CALENDARIFIC_KEY   = "your_key_here"
 ## Author
 
 **Bilal Mohammed**
-CRM Designer → Data Engineer
-Samsung Electronics · Riyadh, Saudi Arabia
+Data Engineer / Analyst
+at Cheil KSA (Samsung Group) · Riyadh, Saudi Arabia
 
-[![GitHub](https://img.shields.io/badge/GitHub-bilal--tunchie-181717?style=flat&logo=github)](https://github.com/bilalmohammed_tunchie)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/in/bilalmohammed)
+[![GitHub](https://img.shields.io/badge/GitHub-bilal--tunchie-181717?style=flat&logo=github)](https://github.com/bilal-tunchie/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/bilal-mohamed-909b95201/)
 
 <br>
 
