@@ -4,6 +4,20 @@
 
 <br>
 
+## What This Project Demonstrates
+
+- **API integration** across 4 heterogeneous sources with different authentication, response formats, and reliability characteristics
+- **Delta Lake** expertise — ACID transactions, schema evolution, time travel awareness, merge patterns
+- **PySpark** at scale — window functions, complex joins, dynamic expressions, broadcast optimization
+- **Medallion architecture** — strict layer separation with clear contracts between Bronze/Silver/Gold
+- **Dimensional modeling** — star schema design, surrogate key strategy, SCD awareness
+- **Data quality** — deduplication at multiple levels, null handling, format normalization, referential integrity validation
+- **Production thinking** — idempotent pipelines, graceful error handling, config-driven design with no hardcoded values
+
+<br>
+
+---
+
 ## Project Overview
 
 This project simulates a real-world retail analytics platform for the Saudi e-commerce market. Built entirely from scratch as a solo data engineering effort, it demonstrates the full spectrum of modern data engineering skills — from API ingestion and distributed processing to dimensional modeling and business intelligence.
@@ -207,20 +221,6 @@ CALENDARIFIC_KEY   = "your_key_here"
 ```
 00_config → Bronze (02–05) → Silver (07–10) → Gold (11–18)
 ```
-
-<br>
-
----
-
-## What This Project Demonstrates
-
-- **API integration** across 4 heterogeneous sources with different authentication, response formats, and reliability characteristics
-- **Delta Lake** expertise — ACID transactions, schema evolution, time travel awareness, merge patterns
-- **PySpark** at scale — window functions, complex joins, dynamic expressions, broadcast optimization
-- **Medallion architecture** — strict layer separation with clear contracts between Bronze/Silver/Gold
-- **Dimensional modeling** — star schema design, surrogate key strategy, SCD awareness
-- **Data quality** — deduplication at multiple levels, null handling, format normalization, referential integrity validation
-- **Production thinking** — idempotent pipelines, graceful error handling, config-driven design with no hardcoded values
 
 <br>
 
