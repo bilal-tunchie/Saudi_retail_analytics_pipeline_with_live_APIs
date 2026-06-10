@@ -6,7 +6,7 @@
 
 ## What This Project Demonstrates
 
-- **API integration** across 4 heterogeneous sources with different authentication, response formats, and reliability characteristics
+- **API integration** across 4 sources with different authentication, response formats, and reliability characteristics
 - **Delta Lake** expertise — ACID transactions, schema evolution, time travel awareness, merge patterns
 - **PySpark** at scale — window functions, complex joins, dynamic expressions, broadcast optimization
 - **Medallion architecture** — strict layer separation with clear contracts between Bronze/Silver/Gold
@@ -18,6 +18,24 @@
 
 ---
 
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Architecture](#architecture)
+- [Repository Structure](#repository-structure)
+- [Star Schema](#star-schema)
+- [Tech Stack](#tech-stack)
+- [Key Engineering Decisions](#key-engineering-decisions)
+- [Data Sources](#data-sources)
+- [Gold Layer Tables](#gold-layer-tables)
+- [Dashboard Pages](#dashboard-pages-power-bi)
+- [How to Run](#how-to-run)
+- [Author](#author)
+- [License](#license)
+
+---
+
+<br>
+
 ## Project Overview
 
 This project simulates a real-world retail analytics platform for the Saudi e-commerce market. Built entirely from scratch as a solo data engineering effort, it demonstrates the full spectrum of modern data engineering skills — from API ingestion and distributed processing to dimensional modeling and business intelligence.
@@ -26,7 +44,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 |---|---|
 | **Market** | Saudi Arabia 🇸🇦 |
 | **Data Volume** | Thounsands of records across 4 source systems |
-| **Date Range** | January 2024 – upto date |
+| **Date Range** | January 2024 – up to date |
 | **Architecture** | Medallion (Bronze → Silver → Gold) |
 | **Processing** | Apache Spark / PySpark on Databricks |
 | **Storage** | Delta Lake |
@@ -52,7 +70,7 @@ This project simulates a real-world retail analytics platform for the Saudi e-co
 Saudi_retail_pipeline/
 │
 ├── scripts/
-│   ├── 00_config.ipynb              # Global config · catalog · constants 
+│   ├── 00_config.ipynb                           # Global config · catalog · constants 
 │   │
 │   ├── bronze/
 │   │   ├── bronze_products.ipynb                 # HasData Amazon.sa scraper (Manual Ingestion version)
@@ -97,7 +115,7 @@ Saudi_retail_pipeline/
 
 | Layer | Technology |
 |---|---|
-| **Compute** | Databricks |
+| **Compute** | AWS Databricks cluster |
 | **Language** | Python · PySpark · SQL |
 | **Storage** | Delta Lake (ACID transactions) |
 | **Catalog** | Unity Catalog |
